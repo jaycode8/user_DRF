@@ -15,6 +15,16 @@ class UsersManager(BaseUserManager):
         user.set_password(password)
         user.save()
         return user
+    
+    def create_superuser(self, username, email, password, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_active", True)
+        extra_fields.setdefault("is_superuser", True)
+        if not extra_fields['is_staff']:
+            raise ValueError("Admin must be staff")
+        if not extra_fields['is_superuser']:
+            raise ValueError("Admin must be superuser")
+        return self.create_user(username, email, password, **extra_fields)
 
 class Users(AbstractBaseUser):
     _id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
@@ -28,6 +38,7 @@ class Users(AbstractBaseUser):
     updated_at = models.DateTimeField(auto_now=True)
 
     USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["email"]
 
     objects = UsersManager()
 

@@ -1,2 +1,5 @@
 .env
 venv
+api.odt
+api.pdf
+db.sqlite3

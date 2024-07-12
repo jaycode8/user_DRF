@@ -46,17 +46,14 @@ def updateUser(req, user):
         return Response({"message":"User updated successfully", "status":status.HTTP_200_OK})
     return Response({"message": serializer.errors, "status": status.HTTP_400_BAD_REQUEST})
 
-def deleteUser(req):
-    id = req.user._id
-    user = Users.objects.get(_id=id)
-    print(user)
+def deleteUser(user):
     user.delete()
     return Response({"message":"successfully deleted record"}, status=status.HTTP_200_OK)
 
 def logOut(req):
     req.user.auth_token.delete()
     logout(req)
-    return Response({"message":"logout"}, status=status.HTTP_200_OK)
+    return Response({"message":"successfully logedout the session"}, status=status.HTTP_200_OK)
 
 @api_view(["GET", "POST"])
 def index(req):
@@ -82,4 +79,4 @@ def user(req):
         return updateUser(req, user)
 
     elif req.method == "DELETE":
-        return deleteUser(req)
+        return deleteUser(user)
